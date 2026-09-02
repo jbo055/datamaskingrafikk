@@ -1,24 +1,25 @@
-# Compiled class file
-*.class
+# Avhengigheter - lastes ned med "npm install", skal ALDRI ligge i git
+node_modules/
 
-# Log file
+# Byggeresultat - genereres fra kildekoden, ingen grunn til a lagre det
+dist/
+build/
+
+# Logger
 *.log
+npm-debug.log*
+yarn-error.log*
 
-# BlueJ files
-*.ctxt
+# Editor
+.vscode/
+.idea/
+*.swp
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# Operativsystem-sopp
+.DS_Store
+Thumbs.db
+desktop.ini
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# Lokale hemmeligheter - passord og API-nokler skal aldri pushes
+.env
+.env.local
