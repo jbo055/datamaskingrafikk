@@ -1,6 +1,7 @@
 'use strict';
 
 import { BaseApp } from './BaseApp.js';
+import { XZPlaneGrid } from './egneShapes/XZPlaneGrid.js';
 
 /**
  * Oblig 1 - 3D hus og trær.
@@ -21,6 +22,10 @@ export class Oblig1App extends BaseApp {
         // Egne figurer opprettes her, ETTER super().
         // Grunnen: BaseShape leser app.gl og app.camera i constructoren sin,
         // og de finnes ikke før BaseApp er ferdig med sin egen constructor.
+
+        // Bakkeplanet: 20x20 ruter, hver 1x1 enhet.
+        this.grid = new XZPlaneGrid(this, 20, 1);
+        this.grid.initBuffers();   // NB! Må kalles, ellers finnes ingen buffer.
     }
 
     /**
@@ -34,6 +39,8 @@ export class Oblig1App extends BaseApp {
     draw(elapsed) {
         super.draw(elapsed);   // Tegner koordinatsystemet.
 
-        // Neste steg: bakkeplan (20x20 rutenett), hus og trær.
+        this.grid.draw(this.baseShaderInfo, elapsed);
+
+        // Neste steg: hus og trær.
     }
 }
