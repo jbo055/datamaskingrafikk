@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Oblig 1 - 3D hus og trær</title>
+    <link rel="stylesheet" href="webgl.css">
+
+    <style>
+        /* .ui ligger oppå canvaset, som er svart. Uten farge er teksten usynlig. */
+        .ui {
+            color: white;
+            font: 14px sans-serif;
+            padding: 8px;
+        }
+    </style>
+
+    <!--
+        VIKTIG: Disse er KLASSISKE script, ikke moduler.
+        De legger Matrix4 (cuon-matrix) og vec3/mat4 (gl-matrix) på window,
+        slik at Camera.js og shape-klassene kan bruke navnene uten å importere dem.
+        Må stå FØR modulen nederst.
+    -->
+    <script src="lib/cuon-matrix.js"></script>
+    <script src="lib/gl-matrix.js"></script>
+</head>
+<body>
+
+<!-- BaseApp.calculateFps() gjør document.getElementById('fps'). Fjernes dette, krasjer appen. -->
+<div class="ui">
+    FPS: <span id="fps">0</span><br>
+    W A S D = roter kamera &nbsp;|&nbsp; V B = zoom
+</div>
+
+<!-- Canvaset lages av WebGLCanvas og legges til i body. Derfor ingen <canvas> her. -->
+
+<script type="module">
+    import { Oblig1App } from './main.js';
+
+    const app = new Oblig1App();
+    app.animate();
+</script>
+
+</body>
+</html>
