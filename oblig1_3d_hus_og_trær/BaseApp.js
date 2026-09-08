@@ -39,11 +39,6 @@ export class BaseApp {
 		}
 	}
 
-	/**
-	 * Enkelt shaderpar med posisjon og farge-attributter.
-	 * NB! Shaderkode og baseShaderInfo-objektet henger sammen.
-	 * SHADERE leses IKKE fra html-fila.
-	 */
 	initShaders() {
 		// Leser shaderkoden fra index.html:
 		const vertexShaderSourceBase =
