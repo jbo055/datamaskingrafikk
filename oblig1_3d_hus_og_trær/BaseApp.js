@@ -58,7 +58,7 @@ export class BaseApp {
 			vertexShaderSourceBase,
 			fragmentShaderSourceBase
 		);
-		
+
 		// Samler all base-shader-info i et JS-objekt.
 		this.baseShaderInfo = {
 			program: glslBaseShader.shaderProgram,
