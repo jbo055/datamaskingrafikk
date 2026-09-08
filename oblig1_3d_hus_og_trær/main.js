@@ -4,6 +4,12 @@ import { BaseApp } from './BaseApp.js';
 import { XZPlaneGrid } from './egneShapes/XZPlaneGrid.js';
 import { ColoredCube } from './egneShapes/ColoredCube.js';
 
+import { drawGroundFloor } from './house/GroundFloor.js';
+import { drawDoor } from './house/Door.js';
+import { drawUpperFloor } from './house/UpperFloor.js';
+import { drawInterior } from './house/Interior.js';
+import { drawStairs } from './house/Stairs.js';
+
 /**
  * Oblig 1 - 3D hus og trær.
  *
@@ -35,6 +41,57 @@ export class Oblig1App extends BaseApp {
         });
 
         this.cube.initBuffers();
+
+        // Egen kube til døren, med brun farge.
+        this.door = new ColoredCube(this, {
+            red: 0.35,
+            green: 0.18,
+            blue: 0.08,
+            alpha: 1.0
+        });
+
+        this.door.initBuffers();
+
+        this.doorAngle = 0;
+
+        // Gjenbrukes til hvite dør- og vinduskarmer.
+        this.frameCube = new ColoredCube(this, {
+            red: 1.0,
+            green: 1.0,
+            blue: 1.0,
+            alpha: 1.0
+        });
+
+        this.frameCube.initBuffers();
+
+        this.floorCube = new ColoredCube(this, {
+            red: 0.65,
+            green: 0.45,
+            blue: 0.25,
+            alpha: 1.0
+        });
+
+        this.floorCube.initBuffers();
+
+        // Lys grå farge til innerveggene.
+        this.innerWallCube = new ColoredCube(this, {
+            red: 0.8,
+            green: 0.8,
+            blue: 0.8,
+            alpha: 1.0
+        });
+
+        this.innerWallCube.initBuffers();
+
+        // Brun farge til trappen.
+        this.stairCube = new ColoredCube(this, {
+            red: 0.45,
+            green: 0.28,
+            blue: 0.14,
+            alpha: 1.0
+        });
+
+        this.stairCube.initBuffers();
     }
 
     /**
@@ -50,9 +107,10 @@ export class Oblig1App extends BaseApp {
 
         this.grid.draw(this.baseShaderInfo, elapsed);
 
-        const modelMatrix = new Matrix4();
-        modelMatrix.translate(0, 1, 0);
-
-        this.cube.draw(this.uniformShaderInfo, elapsed, modelMatrix);
+        drawGroundFloor(this, elapsed);
+        drawDoor(this, elapsed);
+        drawUpperFloor(this, elapsed);
+        drawInterior(this, elapsed);
+        drawStairs(this, elapsed);
     }
 }
