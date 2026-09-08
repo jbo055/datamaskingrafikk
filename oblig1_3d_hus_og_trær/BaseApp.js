@@ -66,6 +66,47 @@ export class BaseApp {
 				modelViewMatrix: this.gl.getUniformLocation(glslBaseShader.shaderProgram, 'uModelViewMatrix'),
 			},
 		};
+
+		// Leser shaderparet med uniform-farge:
+		const vertexShaderSourceUniform =
+			document.getElementById('uniform-vertex-shader').textContent.trim();
+
+		const fragmentShaderSourceUniform =
+			document.getElementById('uniform-fragment-shader').textContent.trim();
+
+		// Kompilerer og kobler shaderne:
+		const glslUniformShader = new WebGLShader(
+			this.gl,
+			vertexShaderSourceUniform,
+			fragmentShaderSourceUniform
+		);
+
+		// Samler programmet og plasseringene til shaderens variabler:
+		this.uniformShaderInfo = {
+			program: glslUniformShader.shaderProgram,
+
+			attribLocations: {
+				vertexPosition: this.gl.getAttribLocation(
+					glslUniformShader.shaderProgram,
+					'aVertexPosition'
+				),
+			},
+
+			uniformLocations: {
+				projectionMatrix: this.gl.getUniformLocation(
+					glslUniformShader.shaderProgram,
+					'uProjectionMatrix'
+				),
+				modelViewMatrix: this.gl.getUniformLocation(
+					glslUniformShader.shaderProgram,
+					'uModelViewMatrix'
+				),
+				color: this.gl.getUniformLocation(
+					glslUniformShader.shaderProgram,
+					'uColor'
+				),
+			},
+		};
 	}
 
 	/**
