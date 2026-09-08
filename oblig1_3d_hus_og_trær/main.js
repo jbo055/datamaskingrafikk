@@ -2,6 +2,7 @@
 
 import { BaseApp } from './BaseApp.js';
 import { XZPlaneGrid } from './egneShapes/XZPlaneGrid.js';
+import { Cube } from './shapes/Cube.js';
 
 /**
  * Oblig 1 - 3D hus og trær.
@@ -26,6 +27,14 @@ export class Oblig1App extends BaseApp {
         // Bakkeplanet: 20x20 ruter, hver 1x1 enhet.
         this.grid = new XZPlaneGrid(this, 20, 1);
         this.grid.initBuffers();   // NB! Må kalles, ellers finnes ingen buffer.
+        this.cube = new Cube(this, {
+            red: 0.8,
+            green: 0.3,
+            blue: 0.1,
+            alpha: 1.0
+        });
+
+        this.cube.initBuffers();
     }
 
     /**
@@ -41,6 +50,9 @@ export class Oblig1App extends BaseApp {
 
         this.grid.draw(this.baseShaderInfo, elapsed);
 
-        // Neste steg: hus og trær.
+        const modelMatrix = new Matrix4();
+        modelMatrix.translate(0, 1, 0);
+
+        this.cube.draw(this.uniformShaderInfo, elapsed, modelMatrix);
     }
 }
