@@ -59,6 +59,31 @@
     }
 </script>
 
+<!-- Vertexshader for figurer med én felles farge. -->
+<script id="uniform-vertex-shader" type="x-shader/x-vertex">#version 300 es
+    in vec4 aVertexPosition;
+
+    uniform mat4 uModelViewMatrix;
+    uniform mat4 uProjectionMatrix;
+
+    void main(void) {
+        gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+    }
+</script>
+
+<!-- Fragmentshader som får fargen fra JavaScript. -->
+<script id="uniform-fragment-shader" type="x-shader/x-fragment">#version 300 es
+    precision mediump float;
+
+    uniform vec4 uColor;
+
+    out vec4 fragColor;
+
+    void main(void) {
+        fragColor = uColor;
+    }
+</script>
+
 <!-- Canvaset lages av WebGLCanvas og legges til i body. Derfor ingen <canvas> her. -->
 
 <script type="module">
