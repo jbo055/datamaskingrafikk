@@ -84,20 +84,8 @@ export class Cube extends BaseShape {
         // implementeres ved behov
     }
 
-    draw(shaderInfo, elapsed, modelMatrix = new Matrix4()) {
+    draw(shaderInfo, elapsed, modelMatrix = (new Matrix4()).setIdentity()) {
         super.draw(shaderInfo, elapsed, modelMatrix);
-
-        // Hvis shaderprogrammet har en uniform-farge, send inn kubens farge.
-        if (shaderInfo.uniformLocations.color != null) {
-            this.gl.uniform4(
-                shaderInfo.uniformLocations.color,
-                this.color.red,
-                this.color.green,
-                this.color.blue,
-                this.color.alpha
-            )
-        }
-
         if (this.wireFrame) {
             this.gl.drawArrays(this.gl.LINE_STRIP, 0, this.vertexCount);
         } else {

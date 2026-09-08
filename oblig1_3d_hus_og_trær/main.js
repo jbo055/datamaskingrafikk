@@ -2,7 +2,7 @@
 
 import { BaseApp } from './BaseApp.js';
 import { XZPlaneGrid } from './egneShapes/XZPlaneGrid.js';
-import { Cube } from './shapes/Cube.js';
+import { ColoredCube } from './egneShapes/ColoredCube.js';
 
 /**
  * Oblig 1 - 3D hus og trær.
@@ -27,7 +27,7 @@ export class Oblig1App extends BaseApp {
         // Bakkeplanet: 20x20 ruter, hver 1x1 enhet.
         this.grid = new XZPlaneGrid(this, 20, 1);
         this.grid.initBuffers();   // NB! Må kalles, ellers finnes ingen buffer.
-        this.cube = new Cube(this, {
+        this.cube = new ColoredCube(this, {
             red: 0.8,
             green: 0.3,
             blue: 0.1,
