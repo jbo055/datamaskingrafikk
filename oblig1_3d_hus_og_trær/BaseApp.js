@@ -45,29 +45,20 @@ export class BaseApp {
 	 * SHADERE leses IKKE fra html-fila.
 	 */
 	initShaders() {
-		// SHADERPAR1: Standard/enkel shader (posisjon og farge):
-		const vertexShaderSourceBase =`#version 300 es
-			in vec4 aVertexPosition;
-		    in vec4 aVertexColor;
-		    uniform mat4 uModelViewMatrix;
-		    uniform mat4 uProjectionMatrix;
-		    out lowp vec4 vColor;
-		    void main(void) {
-		        gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-		        vColor = aVertexColor;
-		        gl_PointSize = 10.0;    //Merk: Kun i bruk når man tegner POINTS
-		    }
-			`;
-		const fragmentShaderSourceBase = `#version 300 es
-			precision mediump float;
-			in lowp vec4 vColor;
-			out lowp vec4 fragColor;
-		    void main(void) {
-		        fragColor = vColor;
-		    }
-		`;
+		// Leser shaderkoden fra index.html:
+		const vertexShaderSourceBase =
+			document.getElementById('base-vertex-shader').textContent.trim();
+
+		const fragmentShaderSourceBase =
+			document.getElementById('base-fragment-shader').textContent.trim();
+
 		// Initialiserer  & kompilerer shader-programmene;
-		const glslBaseShader = new WebGLShader(this.gl, vertexShaderSourceBase, fragmentShaderSourceBase);
+		const glslBaseShader = new WebGLShader(
+			this.gl,
+			vertexShaderSourceBase,
+			fragmentShaderSourceBase
+		);
+		
 		// Samler all base-shader-info i et JS-objekt.
 		this.baseShaderInfo = {
 			program: glslBaseShader.shaderProgram,

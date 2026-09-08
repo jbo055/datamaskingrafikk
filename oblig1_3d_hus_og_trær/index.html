@@ -31,6 +31,34 @@
     W A S D = roter kamera &nbsp;|&nbsp; V B = zoom
 </div>
 
+<!-- Vertexshader: beregner posisjon og sender fargen videre. -->
+<script id="base-vertex-shader" type="x-shader/x-vertex">#version 300 es
+    in vec4 aVertexPosition;
+    in vec4 aVertexColor;
+
+    uniform mat4 uModelViewMatrix;
+    uniform mat4 uProjectionMatrix;
+
+    out lowp vec4 vColor;
+    void main(void) {
+        gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+        vColor = aVertexColor;
+        gl_PointSize = 10.0;
+    }
+</script>
+
+<!-- Fragmentshader: bestemmer fargen som tegnes. -->
+<script id="base-fragment-shader" type="x-shader/x-fragment">#version 300 es
+    precision medium float;
+
+    in lowp vec4 vColor;
+    out lowp vec4 fragColor;
+
+    void main(void) {
+        fragColor = vColor;
+    }
+</script>
+
 <!-- Canvaset lages av WebGLCanvas og legges til i body. Derfor ingen <canvas> her. -->
 
 <script type="module">
