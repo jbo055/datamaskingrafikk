@@ -40,73 +40,76 @@ export class BaseApp {
 	}
 
 	initShaders() {
+		// Standard shaderpar: hver vertex har sin egen farge.
+		this.baseShaderInfo = this.createShaderInfo(
+			'base-vertex-shader',
+			'base-fragment-shader',
+			{
+				vertexPosition: 'aVertexPosition',
+				vertexColor: 'aVertexColor',
+			},
+			{
+				projectionMatrix: 'uProjectionMatrix',
+				modelViewMatrix: 'uModelViewMatrix',
+			}
+		);
+
+		// Shaderpar der hele figuren får én felles farge fra JavaScript.
+		this.uniformShaderInfo = this.createShaderInfo(
+			'uniform-vertex-shader',
+			'uniform-fragment-shader',
+			{
+				vertexPosition: 'aVertexPosition',
+			},
+			{
+				projectionMatrix: 'uProjectionMatrix',
+				modelViewMatrix: 'uModelViewMatrix',
+				color: 'uColor',
+			}
+		);
+	}
+
+	/**
+	 * Leser, kompilerer og kobler ETT shaderpar, og slår opp hvor
+	 * shaderens variabler ligger. Returnerer et ferdig shaderInfo-objekt.
+	 *
+	 * attribs og uniforms skrives som { navnetJegBruker: 'navnetIGlsl' },
+	 * f.eks. { vertexColor: 'aVertexColor' }.
+	 */
+	createShaderInfo(vertexElementId, fragmentElementId, attribs, uniforms) {
 		// Leser shaderkoden fra index.html:
-		const vertexShaderSourceBase =
-			document.getElementById('base-vertex-shader').textContent.trim();
+		const vertexShaderSource =
+			document.getElementById(vertexElementId).textContent.trim();
 
-		const fragmentShaderSourceBase =
-			document.getElementById('base-fragment-shader').textContent.trim();
+		const fragmentShaderSource =
+			document.getElementById(fragmentElementId).textContent.trim();
 
-		// Initialiserer  & kompilerer shader-programmene;
-		const glslBaseShader = new WebGLShader(
+		// Initialiserer & kompilerer shader-programmet:
+		const glslShader = new WebGLShader(
 			this.gl,
-			vertexShaderSourceBase,
-			fragmentShaderSourceBase
+			vertexShaderSource,
+			fragmentShaderSource
 		);
-
-		// Samler all base-shader-info i et JS-objekt.
-		this.baseShaderInfo = {
-			program: glslBaseShader.shaderProgram,
-			attribLocations: {
-				vertexPosition: this.gl.getAttribLocation(glslBaseShader.shaderProgram, 'aVertexPosition'),
-				vertexColor: this.gl.getAttribLocation(glslBaseShader.shaderProgram, 'aVertexColor'),
-			},
-			uniformLocations: {
-				projectionMatrix: this.gl.getUniformLocation(glslBaseShader.shaderProgram, 'uProjectionMatrix'),
-				modelViewMatrix: this.gl.getUniformLocation(glslBaseShader.shaderProgram, 'uModelViewMatrix'),
-			},
-		};
-
-		// Leser shaderparet med uniform-farge:
-		const vertexShaderSourceUniform =
-			document.getElementById('uniform-vertex-shader').textContent.trim();
-
-		const fragmentShaderSourceUniform =
-			document.getElementById('uniform-fragment-shader').textContent.trim();
-
-		// Kompilerer og kobler shaderne:
-		const glslUniformShader = new WebGLShader(
-			this.gl,
-			vertexShaderSourceUniform,
-			fragmentShaderSourceUniform
-		);
+		const program = glslShader.shaderProgram;
 
 		// Samler programmet og plasseringene til shaderens variabler:
-		this.uniformShaderInfo = {
-			program: glslUniformShader.shaderProgram,
-
-			attribLocations: {
-				vertexPosition: this.gl.getAttribLocation(
-					glslUniformShader.shaderProgram,
-					'aVertexPosition'
-				),
-			},
-
-			uniformLocations: {
-				projectionMatrix: this.gl.getUniformLocation(
-					glslUniformShader.shaderProgram,
-					'uProjectionMatrix'
-				),
-				modelViewMatrix: this.gl.getUniformLocation(
-					glslUniformShader.shaderProgram,
-					'uModelViewMatrix'
-				),
-				color: this.gl.getUniformLocation(
-					glslUniformShader.shaderProgram,
-					'uColor'
-				),
-			},
+		const shaderInfo = {
+			program: program,
+			attribLocations: {},
+			uniformLocations: {},
 		};
+
+		for (const navn in attribs) {
+			shaderInfo.attribLocations[navn] =
+				this.gl.getAttribLocation(program, attribs[navn]);
+		}
+
+		for (const navn in uniforms) {
+			shaderInfo.uniformLocations[navn] =
+				this.gl.getUniformLocation(program, uniforms[navn]);
+		}
+
+		return shaderInfo;
 	}
 
 	/**
