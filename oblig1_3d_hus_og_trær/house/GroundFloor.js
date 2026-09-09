@@ -19,6 +19,15 @@ export function drawGroundFloor(app, elapsed) {
         app.uniformShaderInfo, elapsed, belowBackWindowMatrix
     );
 
+    // Bakvegg fra venstre huskant til vinduet.
+    const backWindowLeftMatrix = new Matrix4();
+    backWindowLeftMatrix.translate(-1.3, 1.7, -2.9);
+    backWindowLeftMatrix.scale(2.7, 0.7, 0.1);
+
+    app.cube.draw(
+        app.uniformShaderInfo, elapsed, backWindowLeftMatrix
+    );
+
     // Bakvegg over vinduet.
     const aboveBackWindowMatrix = new Matrix4();
     aboveBackWindowMatrix.translate(0, 2.9, -2.9);
@@ -46,22 +55,31 @@ export function drawGroundFloor(app, elapsed) {
         app.uniformShaderInfo, elapsed, aboveSideWindowMatrix
     );
 
-    // Vegg mellom bakveggen og vinduet.
-    const behindSideWindowMatrix = new Matrix4();
-    behindSideWindowMatrix.translate(-3.9, 1.7, -1.8);
-    behindSideWindowMatrix.scale(0.1, 0.7, 1);
+    // Vegg mellom bakveggen og det bakre vinduet.
+    const sideBackMatrix = new Matrix4();
+    sideBackMatrix.translate(-3.9, 1.7, -2.4);
+    sideBackMatrix.scale(0.1, 0.7, 0.4);
 
     app.cube.draw(
-        app.uniformShaderInfo, elapsed, behindSideWindowMatrix
+        app.uniformShaderInfo, elapsed, sideBackMatrix
     );
 
-    // Vegg mellom vinduet og frontveggen.
-    const aheadOfSideWindowMatrix = new Matrix4();
-    aheadOfSideWindowMatrix.translate(-3.9, 1.7, 1.9);
-    aheadOfSideWindowMatrix.scale(0.1, 0.7, 1.1);
+    // Vegg mellom de to vinduene.
+    const sideMiddleMatrix = new Matrix4();
+    sideMiddleMatrix.translate(-3.9, 1.7, 0);
+    sideMiddleMatrix.scale(0.1, 0.7, 0.8);
 
     app.cube.draw(
-        app.uniformShaderInfo, elapsed, aheadOfSideWindowMatrix
+        app.uniformShaderInfo, elapsed, sideMiddleMatrix
+    );
+
+    // Vegg mellom det fremre vinduet og frontveggen.
+    const sideFrontMatrix = new Matrix4();
+    sideFrontMatrix.translate(-3.9, 1.7, 2.5);
+    sideFrontMatrix.scale(0.1, 0.7, 0.5);
+
+    app.cube.draw(
+        app.uniformShaderInfo, elapsed, sideFrontMatrix
     );
 
     // Vegg fra vinduet til høyre huskant.
@@ -72,13 +90,6 @@ export function drawGroundFloor(app, elapsed) {
     app.cube.draw(
         app.uniformShaderInfo, elapsed, backWindowRightMatrix
     );
-
-    // Venstre vegg: 0.2 tykk, 3 høy og 5.8 dyp.
-    const leftWallMatrix = new Matrix4();
-    leftWallMatrix.translate(-3.9, 1.7, 0.1);
-    leftWallMatrix.scale(0.1, 1.7, 2.9);
-
-    app.cube.draw(app.uniformShaderInfo, elapsed, leftWallMatrix);
 
     // Høyre vegg: samme størrelse, på motsatt side.
     const rightWallMatrix = new Matrix4();
@@ -174,4 +185,10 @@ export function drawGroundFloor(app, elapsed) {
     drawWindowFrame(app, elapsed, -2.2, 1.7, 2.9, 1.6, 1.4);
     drawWindowFrame(app, elapsed, 2.2, 1.7, 2.9, 1.6, 1.4);
     drawWindowFrame(app, elapsed, 2.2, 1.7, -2.9, 1.6, 1.4);
+
+    // Bakre vindu på venstre sidevegg.
+    drawWindowFrame(app, elapsed, -3.9, 1.7, -1.4, 1.2, 1.4, 90);
+
+    // Fremre vindu på venstre sidevegg.
+    drawWindowFrame(app, elapsed, -3.9, 1.7, 1.4, 1.2, 1.4, 90);
 }

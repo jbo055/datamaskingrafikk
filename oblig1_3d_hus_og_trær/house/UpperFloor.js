@@ -1,3 +1,5 @@
+import { drawWindowFrame } from './Windows.js';
+
 'use strict';
 
 export function initUpperFloor(app) {
@@ -69,21 +71,47 @@ export function drawUpperFloor(app, elapsed) {
         app.uniformShaderInfo, elapsed, upperFrontMatrix
     );
 
-    // Venstre gavl.
-    const leftGableMatrix = new Matrix4();
-    leftGableMatrix.translate(-3.9, 5.4, 0);
-    leftGableMatrix.scale(0.1, 1, 3);
+    // Ett vindu i hver gavl.
+    for (const x of [-3.9, 3.9]) {
+        // Rektangulær veggdel over vinduet.
+        const aboveMatrix = new Matrix4();
+        aboveMatrix.translate(x, 5.7, 0);
+        aboveMatrix.scale(0.1, 0.3, 0.6);
 
-    app.triangleBlock.draw(
-        app.uniformShaderInfo, elapsed, leftGableMatrix
-    );
+        app.cube.draw(
+            app.uniformShaderInfo, elapsed, aboveMatrix
+        );
 
-    // Høyre gavl.
-    const rightGableMatrix = new Matrix4();
-    rightGableMatrix.translate(3.9, 5.4, 0);
-    rightGableMatrix.scale(0.1, 1, 3);
+        // Trekanten øverst, opp mot mønet.
+        const topMatrix = new Matrix4();
+        topMatrix.translate(x, 6.2, 0);
+        topMatrix.scale(0.1, 0.2, 0.6);
 
-    app.triangleBlock.draw(
-        app.uniformShaderInfo, elapsed, rightGableMatrix
-    );
+        app.triangleBlock.draw(
+            app.uniformShaderInfo, elapsed, topMatrix
+        );
+
+        // Skrå veggdeler på begge sider av vinduet.
+        for (const side of [-1, 1]) {
+            const slopeMatrix = new Matrix4();
+
+            slopeMatrix.translate(x, 4.8, side * 1.2);
+
+            slopeMatrix.scale(
+                0.1,
+                1.6 / Math.SQRT2,
+                side * 2.4 / Math.SQRT2
+            );
+
+            slopeMatrix.rotate(-135, 1, 0, 0);
+            slopeMatrix.scale(1, 0.5, 1);
+
+            app.triangleBlock.draw(
+                app.uniformShaderInfo, elapsed, slopeMatrix
+            );
+        }
+
+        // Hvit karm rundt åpningen.
+        drawWindowFrame(app, elapsed, x, 4.9, 0, 1.2, 1, 90);
+    }
 }
