@@ -57,4 +57,14 @@ export function drawInterior(app, elapsed) {
     app.innerWallCube.draw(
         app.uniformShaderInfo, elapsed, rightDividerMatrix
     );
+    // Vegg langs trappens åpne side i første etasje.
+    const stairWallMatrix = new Matrix4();
+    stairWallMatrix.translate(-1.1, 1.7, -1.5);
+    stairWallMatrix.scale(1.8, 1.5, 0.1);
+
+    app.innerWallCube.draw(
+        app.uniformShaderInfo,
+        elapsed,
+        stairWallMatrix
+    );
 }

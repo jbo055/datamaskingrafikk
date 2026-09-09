@@ -1,85 +1,135 @@
+'use strict';
+
 import { TriangleBlock } from '../egneShapes/TriangleBlock.js';
 
 let innerTriangle;
 
-'use strict';
-
 export function drawUpperInterior(app, elapsed) {
-    // Opprett klossen og bufferet bare første gang.
+    // Opprett trekantklossen og bufferet bare første gang.
     if (!innerTriangle) {
-        innerTriangle = new TriangleBlock(app, app.innerWallCube.color);
+        innerTriangle = new TriangleBlock(
+            app,
+            app.innerWallCube.color
+        );
+
         innerTriangle.initBuffers();
     }
 
-    // Venstre veggdel.
-    const leftMatrix = new Matrix4();
-    leftMatrix.translate(-3.15, 4.8, 0);
-    leftMatrix.scale(0.65, 1.4, 0.1);
+    // To skillevegger gir et venstre, et midtre og et høyre rom.
+    for (const x of [-1.3, 1.3]) {
 
-    app.innerWallCube.draw(
-        app.uniformShaderInfo, elapsed, leftMatrix
-    );
+        // Døråpning mellom z = -0.6 og z = 0.6.
+        // Bakerst stopper veggene ved z = -1.6,
+        // slik at passasjen over trappen holdes åpen.
+        const sections = [
+            // Venstre vegg stopper ved trappeåpningen.
+            // Høyre vegg går helt til bakveggen.
+            { side: -1, end: x < 0 ? 1.6 : 2.8 },
+            { side: 1, end: 2.8 }
+        ];
 
-    // Midtdel mellom døråpningene.
-    const middleMatrix = new Matrix4();
-    middleMatrix.translate(0, 4.8, 0);
-    middleMatrix.scale(1.3, 1.4, 0.1);
+        for (const section of sections) {
+            const length = section.end - 0.6;
 
-    app.innerWallCube.draw(
-        app.uniformShaderInfo, elapsed, middleMatrix
-    );
+            // Beregn høydene slik at veggen følger skråtaket.
+            const farTop =
+                6.2 - (section.end - 0.1) * 2 / 3;
 
-    // Høyre veggdel.
-    const rightMatrix = new Matrix4();
-    rightMatrix.translate(3.15, 4.8, 0);
-    rightMatrix.scale(0.65, 1.4, 0.1);
+            const baseHeight = farTop - 3.4;
+            const slopeHeight = length * 2 / 3;
 
-    app.innerWallCube.draw(
-        app.uniformShaderInfo, elapsed, rightMatrix
-    );
+            // Rektangulær underdel.
+            const baseMatrix = new Matrix4();
 
-    // Over venstre døråpning.
-    const leftTopMatrix = new Matrix4();
-    leftTopMatrix.translate(-1.9, 5.9, 0);
-    leftTopMatrix.scale(0.6, 0.3, 0.1);
+            baseMatrix.translate(
+                x,
+                3.4 + baseHeight / 2,
+                section.side * (0.6 + length / 2)
+            );
 
-    app.innerWallCube.draw(
-        app.uniformShaderInfo, elapsed, leftTopMatrix
-    );
+            baseMatrix.scale(
+                0.1,
+                baseHeight / 2,
+                length / 2
+            );
 
-    // Over høyre døråpning.
-    const rightTopMatrix = new Matrix4();
-    rightTopMatrix.translate(1.9, 5.9, 0);
-    rightTopMatrix.scale(0.6, 0.3, 0.1);
+            app.innerWallCube.draw(
+                app.uniformShaderInfo,
+                elapsed,
+                baseMatrix
+            );
 
-    app.innerWallCube.draw(
-        app.uniformShaderInfo, elapsed, rightTopMatrix
-    );
+            // Skrå overdel.
+            const slopeMatrix = new Matrix4();
 
-    // Skråskåret skillevegg mellom de to rommene.
-    const dividerSlopeMatrix = new Matrix4();
+            slopeMatrix.translate(
+                x,
+                farTop + slopeHeight / 4,
+                section.side * (0.6 + length / 4)
+            );
 
-    dividerSlopeMatrix.translate(0, 4.85, 0.775);
+            slopeMatrix.scale(
+                0.1,
+                slopeHeight / Math.SQRT2,
+                section.side * length / Math.SQRT2
+            );
 
-    dividerSlopeMatrix.scale(
-        0.1,
-        1.8 / Math.SQRT2,
-        2.7 / Math.SQRT2
-    );
+            slopeMatrix.rotate(-135, 1, 0, 0);
+            slopeMatrix.scale(1, 0.5, 1);
 
-    dividerSlopeMatrix.rotate(-135, 1, 0, 0);
-    dividerSlopeMatrix.scale(1, 0.5, 1);
+            innerTriangle.draw(
+                app.uniformShaderInfo,
+                elapsed,
+                slopeMatrix
+            );
 
-    innerTriangle.draw(
-        app.uniformShaderInfo, elapsed, dividerSlopeMatrix
-    );
+            // Lukker venstre rom langs kanten av trappeåpningen.
+            // Går fra venstre yttervegg til venstre skillevegg.
+            const stairSideWallMatrix = new Matrix4();
 
-    // Veggen under den skrå trekantklossen.
-    const dividerBaseMatrix = new Matrix4();
-    dividerBaseMatrix.translate(0, 3.9, 1.45);
-    dividerBaseMatrix.scale(0.1, 0.5, 1.35);
+            stairSideWallMatrix.translate(-2.6, 4.3, -1.5);
+            stairSideWallMatrix.scale(1.2, 0.9, 0.1);
 
-    app.innerWallCube.draw(
-        app.uniformShaderInfo, elapsed, dividerBaseMatrix
-    );
+            app.innerWallCube.draw(
+                app.uniformShaderInfo,
+                elapsed,
+                stairSideWallMatrix
+            );
+        }
+
+        // Rektangulær del over døråpningen.
+        const shoulderY = 6.2 - (0.6 - 0.1) * 2 / 3;
+        const openingTop = 5.6;
+
+        const aboveDoorMatrix = new Matrix4();
+
+        aboveDoorMatrix.translate(
+            x,
+            (openingTop + shoulderY) / 2,
+            0
+        );
+
+        aboveDoorMatrix.scale(
+            0.1,
+            (shoulderY - openingTop) / 2,
+            0.6
+        );
+
+        app.innerWallCube.draw(
+            app.uniformShaderInfo,
+            elapsed,
+            aboveDoorMatrix
+        );
+
+        // Trekant over døråpningen, opp mot mønet.
+        const topMatrix = new Matrix4();
+        topMatrix.translate(x, shoulderY + 0.2, 0);
+        topMatrix.scale(0.1, 0.2, 0.6);
+
+        innerTriangle.draw(
+            app.uniformShaderInfo,
+            elapsed,
+            topMatrix
+        );
+    }
 }

@@ -1,5 +1,9 @@
 'use strict';
 
+import { Glass } from '../egneShapes/Glass.js';
+
+let glass;
+
 export function drawWindowFrame(
     app, elapsed, x, y, z, width, height, rotation = 0
 ) {
@@ -53,4 +57,62 @@ export function drawWindowFrame(
             app.uniformShaderInfo, elapsed, horizontalMatrix
         );
     }
+}
+
+export function drawWindowGlass(app, elapsed) {
+    // Opprettes bare første gang.
+    if (!glass) {
+        glass = new Glass(app);
+        glass.initBuffers();
+    }
+
+    // Målene er åpningene INNENFOR de hvite karmene.
+    const windows = [
+        // Frontveggen.
+        { x: -2.2, y: 1.7, z: 2.9, width: 1.44, height: 1.24, rotation: 0 },
+        { x:  2.2, y: 1.7, z: 2.9, width: 1.44, height: 1.24, rotation: 0 },
+
+        // Bakveggen.
+        { x: 2.2, y: 1.7, z: -2.9, width: 1.44, height: 1.24, rotation: 0 },
+
+        // Venstre sidevegg.
+        { x: -3.9, y: 1.7, z: -1.4, width: 1.04, height: 1.24, rotation: 90 },
+        { x: -3.9, y: 1.7, z:  1.4, width: 1.04, height: 1.24, rotation: 90 },
+
+        // Gavlene i andre etasje.
+        { x: -3.9, y: 4.9, z: 0, width: 1.04, height: 0.84, rotation: 90 },
+        { x:  3.9, y: 4.9, z: 0, width: 1.04, height: 0.84, rotation: 90 },
+    ];
+
+    // Tegn de fjerneste vinduene først.
+    const distanceSquared = (window) => {
+        const dx = window.x - app.camera.camPosX;
+        const dy = window.y - app.camera.camPosY;
+        const dz = window.z - app.camera.camPosZ;
+
+        return dx * dx + dy * dy + dz * dz;
+    };
+
+    windows.sort(
+        (a, b) => distanceSquared(b) - distanceSquared(a)
+    );
+
+    const gl = app.gl;
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.depthMask(false);
+
+    for (const window of windows) {
+        const modelMatrix = new Matrix4();
+
+        modelMatrix.translate(window.x, window.y, window.z);
+        modelMatrix.rotate(window.rotation, 0, 1, 0);
+        modelMatrix.scale(window.width / 2, window.height / 2, 1);
+
+        glass.draw(app.uniformShaderInfo, elapsed, modelMatrix);
+    }
+
+    gl.depthMask(true);
+    gl.disable(gl.BLEND);
 }

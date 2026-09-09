@@ -12,6 +12,9 @@ import { drawInterior } from './house/LowerInterior.js';
 import { drawStairs } from './house/Stairs.js';
 import { drawRoof } from './house/Roof.js';
 import { drawUpperInterior } from './house/UpperInterior.js';
+import { drawWindowGlass } from './house/Windows.js';
+import { drawChimney } from './house/Chimney.js';
+import { drawDormer } from './house/Dormer.js';
 
 /**
  * Oblig 1 - 3D hus og trær.
@@ -131,5 +134,8 @@ export class Oblig1App extends BaseApp {
         drawStairs(this, elapsed);
         drawRoof(this, elapsed);
         drawUpperInterior(this, elapsed);
+        drawChimney(this, elapsed);
+        drawWindowGlass(this, elapsed);
+        drawDormer(this, elapsed);
     }
 }
