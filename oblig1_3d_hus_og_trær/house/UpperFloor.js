@@ -1,5 +1,10 @@
 'use strict';
 
+export function initUpperFloor(app) {
+    app.gable = new TriangularPrism(app, app.cube.color);
+    app.gable.initBuffers();
+}
+
 export function drawUpperFloor(app, elapsed) {
     // Gulvet foran trappeåpningen.
     const upperFloorFrontMatrix = new Matrix4();
@@ -26,5 +31,59 @@ export function drawUpperFloor(app, elapsed) {
 
     app.floorCube.draw(
         app.uniformShaderInfo, elapsed, upperFloorRightMatrix
+    );
+
+    // Andre etasje: bakvegg.
+    const upperBackMatrix = new Matrix4();
+    upperBackMatrix.translate(0, 3.9, -2.9);
+    upperBackMatrix.scale(4, 0.5, 0.1);
+
+    app.cube.draw(
+        app.uniformShaderInfo, elapsed, upperBackMatrix
+    );
+
+    // Venstre sidevegg.
+    const upperLeftMatrix = new Matrix4();
+    upperLeftMatrix.translate(-3.9, 3.9, 0.1);
+    upperLeftMatrix.scale(0.1, 0.5, 2.9);
+
+    app.cube.draw(
+        app.uniformShaderInfo, elapsed, upperLeftMatrix
+    );
+
+    // Høyre sidevegg.
+    const upperRightMatrix = new Matrix4();
+    upperRightMatrix.translate(3.9, 3.9, 0.1);
+    upperRightMatrix.scale(0.1, 0.5, 2.9);
+
+    app.cube.draw(
+        app.uniformShaderInfo, elapsed, upperRightMatrix
+    );
+
+    // Frontvegg mellom sideveggene.
+    const upperFrontMatrix = new Matrix4();
+    upperFrontMatrix.translate(0, 3.9, 2.9);
+    upperFrontMatrix.scale(3.8, 0.5, 0.1);
+
+    app.cube.draw(
+        app.uniformShaderInfo, elapsed, upperFrontMatrix
+    );
+
+    // Venstre gavl.
+    const leftGableMatrix = new Matrix4();
+    leftGableMatrix.translate(-3.9, 5.4, 0);
+    leftGableMatrix.scale(0.1, 1, 3);
+
+    app.triangleBlock.draw(
+        app.uniformShaderInfo, elapsed, leftGableMatrix
+    );
+
+    // Høyre gavl.
+    const rightGableMatrix = new Matrix4();
+    rightGableMatrix.translate(3.9, 5.4, 0);
+    rightGableMatrix.scale(0.1, 1, 3);
+
+    app.triangleBlock.draw(
+        app.uniformShaderInfo, elapsed, rightGableMatrix
     );
 }

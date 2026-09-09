@@ -3,12 +3,15 @@
 import { BaseApp } from './BaseApp.js';
 import { XZPlaneGrid } from './egneShapes/XZPlaneGrid.js';
 import { ColoredCube } from './egneShapes/ColoredCube.js';
+import { TriangleBlock } from './egneShapes/TriangleBlock.js';
 
 import { drawGroundFloor } from './house/GroundFloor.js';
 import { drawDoor } from './house/Door.js';
 import { drawUpperFloor } from './house/UpperFloor.js';
-import { drawInterior } from './house/Interior.js';
+import { drawInterior } from './house/LowerInterior.js';
 import { drawStairs } from './house/Stairs.js';
+import { drawRoof } from './house/Roof.js';
+import { drawUpperInterior } from './house/UpperInterior.js';
 
 /**
  * Oblig 1 - 3D hus og trær.
@@ -33,10 +36,11 @@ export class Oblig1App extends BaseApp {
         // Bakkeplanet: 20x20 ruter, hver 1x1 enhet.
         this.grid = new XZPlaneGrid(this, 20, 1);
         this.grid.initBuffers();   // NB! Må kalles, ellers finnes ingen buffer.
+        
         this.cube = new ColoredCube(this, {
-            red: 0.8,
-            green: 0.3,
-            blue: 0.1,
+            red: 0.6,
+            green: 0.2,
+            blue: 0.3,
             alpha: 1.0
         });
 
@@ -92,6 +96,19 @@ export class Oblig1App extends BaseApp {
         });
 
         this.stairCube.initBuffers();
+
+        // Mørk grå farge til taket.
+        this.roofCube = new ColoredCube(this, {
+            red: 0.2,
+            green: 0.2,
+            blue: 0.2,
+            alpha: 1.0
+        });
+
+        this.roofCube.initBuffers();
+
+        this.triangleBlock = new TriangleBlock(this, this.cube.color);
+        this.triangleBlock.initBuffers();
     }
 
     /**
@@ -112,5 +129,7 @@ export class Oblig1App extends BaseApp {
         drawUpperFloor(this, elapsed);
         drawInterior(this, elapsed);
         drawStairs(this, elapsed);
+        drawRoof(this, elapsed);
+        drawUpperInterior(this, elapsed);
     }
 }
