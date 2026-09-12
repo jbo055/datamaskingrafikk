@@ -1,8 +1,11 @@
 'use strict';
 
-export function drawDoor(app, elapsed) {
-    // Dør: 1.1 bred, 2.1 høy og 0.1 tykk.
-    // Endrer vinkelen mens F eller G holdes inne.
+/**
+ * Endrer dørens vinkel mens F eller G holdes inne.
+ * Kalles fra handleKeys(), ikke fra draw(): input og tegning er to
+ * ulike ansvar, og drawDoor() skal bare tegne døren slik den står nå.
+ */
+export function updateDoor(app, elapsed) {
     if (app.currentlyPressedKeys['KeyF']) {
         app.doorAngle += 90 * elapsed;
     }
@@ -13,7 +16,10 @@ export function drawDoor(app, elapsed) {
 
     // Holder vinkelen mellom 0 og 90 grader.
     app.doorAngle = Math.max(0, Math.min(90, app.doorAngle));
+}
 
+export function drawDoor(app, elapsed) {
+    // Dør: 1.1 bred, 2.1 høy og 0.1 tykk.
     const doorMatrix = new Matrix4();
 
     // Plasser hengslet ved dørens venstre kant.

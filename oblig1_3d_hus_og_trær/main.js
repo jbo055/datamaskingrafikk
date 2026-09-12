@@ -4,9 +4,13 @@ import { BaseApp } from './BaseApp.js';
 import { XZPlaneGrid } from './egneShapes/XZPlaneGrid.js';
 import { ColoredCube } from './egneShapes/ColoredCube.js';
 import { TriangleBlock } from './egneShapes/TriangleBlock.js';
+import { Cylinder } from './egneShapes/Cylinder.js';
+import { Sphere } from './egneShapes/Sphere.js';
+import { Circle } from './egneShapes/Circle.js';
+import { Rectangle } from './egneShapes/Rectangle.js';
 
 import { drawGroundFloor } from './house/GroundFloor.js';
-import { drawDoor } from './house/Door.js';
+import { drawDoor, updateDoor } from './house/Door.js';
 import { drawUpperFloor } from './house/UpperFloor.js';
 import { drawInterior } from './house/LowerInterior.js';
 import { drawStairs } from './house/Stairs.js';
@@ -16,6 +20,8 @@ import { drawWindowGlass } from './house/Windows.js';
 import { drawChimney } from './house/Chimney.js';
 import { drawDormer } from './house/Dormer.js';
 import { drawEntranceRoof } from './house/EntranceRoof.js';
+import { drawClock } from './house/Clock.js';
+import { drawTrees } from './garden/Trees.js';
 
 /**
  * Oblig 1 - 3D hus og trær.
@@ -113,6 +119,63 @@ export class Oblig1App extends BaseApp {
 
         this.triangleBlock = new TriangleBlock(this, this.cube.color);
         this.triangleBlock.initBuffers();
+
+        // Trær: tegnes med verteksfarge-shaderen (baseShaderInfo).
+        this.trunk = new Cylinder(this, {
+            red: 0.45,
+            green: 0.28,
+            blue: 0.12,
+            alpha: 1.0
+        });
+
+        this.trunk.initBuffers();
+
+        this.crown = new Sphere(this, {
+            red: 0.15,
+            green: 0.6,
+            blue: 0.15,
+            alpha: 1.0
+        });
+
+        this.crown.initBuffers();
+
+        // Klokke: hvit skive, svart kant og svarte visere.
+        this.clockFace = new Circle(this, {
+            red: 1.0,
+            green: 1.0,
+            blue: 1.0,
+            alpha: 1.0
+        });
+
+        this.clockFace.initBuffers();
+
+        this.clockRim = new Circle(this, {
+            red: 0.0,
+            green: 0.0,
+            blue: 0.0,
+            alpha: 1.0
+        });
+
+        this.clockRim.initBuffers();
+
+        this.clockHand = new Rectangle(this, {
+            red: 0.0,
+            green: 0.0,
+            blue: 0.0,
+            alpha: 1.0
+        });
+
+        this.clockHand.initBuffers();
+    }
+
+    /**
+     * Kalles fra BaseApp.animate() før draw().
+     * All brukerinput håndteres her, så draw()-funksjonene bare tegner.
+     */
+    handleKeys(elapsed) {
+        super.handleKeys(elapsed);   // Kameraet: W A S D og V B.
+
+        updateDoor(this, elapsed);   // Ytterdøren: F og G.
     }
 
     /**
@@ -138,6 +201,10 @@ export class Oblig1App extends BaseApp {
         drawChimney(this, elapsed);
         drawDormer(this, elapsed);
         drawEntranceRoof(this, elapsed);
+        drawClock(this, elapsed);
+        drawTrees(this, elapsed);
+
+        // Gjennomsiktig glass tegnes ALLTID sist.
         drawWindowGlass(this, elapsed);
     }
 }

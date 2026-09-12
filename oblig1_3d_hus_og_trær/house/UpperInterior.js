@@ -82,19 +82,6 @@ export function drawUpperInterior(app, elapsed) {
                 elapsed,
                 slopeMatrix
             );
-
-            // Lukker venstre rom langs kanten av trappeåpningen.
-            // Går fra venstre yttervegg til venstre skillevegg.
-            const stairSideWallMatrix = new Matrix4();
-
-            stairSideWallMatrix.translate(-2.6, 4.3, -1.5);
-            stairSideWallMatrix.scale(1.2, 0.9, 0.1);
-
-            app.innerWallCube.draw(
-                app.uniformShaderInfo,
-                elapsed,
-                stairSideWallMatrix
-            );
         }
 
         // Rektangulær del over døråpningen.
@@ -132,4 +119,18 @@ export function drawUpperInterior(app, elapsed) {
             topMatrix
         );
     }
+
+    // Lukker venstre rom langs kanten av trappeåpningen.
+    // Går fra venstre yttervegg til venstre skillevegg.
+    // Står utenfor løkkene: veggen er bare én, og skal tegnes én gang.
+    const stairSideWallMatrix = new Matrix4();
+
+    stairSideWallMatrix.translate(-2.6, 4.3, -1.5);
+    stairSideWallMatrix.scale(1.2, 0.9, 0.1);
+
+    app.innerWallCube.draw(
+        app.uniformShaderInfo,
+        elapsed,
+        stairSideWallMatrix
+    );
 }
