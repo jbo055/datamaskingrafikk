@@ -19,7 +19,7 @@ import { drawUpperInterior } from './house/UpperInterior.js';
 import { drawWindowGlass } from './house/Windows.js';
 import { drawChimney } from './house/Chimney.js';
 import { drawDormer } from './house/Dormer.js';
-import { drawEntranceRoof } from './house/EntranceRoof.js';
+import { drawEntrancePlatform } from './house/EntrancePlatform.js';
 import { drawClock } from './house/Clock.js';
 import { drawTrees } from './garden/Trees.js';
 
@@ -200,7 +200,7 @@ export class Oblig1App extends BaseApp {
         drawUpperInterior(this, elapsed);
         drawChimney(this, elapsed);
         drawDormer(this, elapsed);
-        drawEntranceRoof(this, elapsed);
+        drawEntrancePlatform(this, elapsed);
         drawClock(this, elapsed);
         drawTrees(this, elapsed);
 
