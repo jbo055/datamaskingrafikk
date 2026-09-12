@@ -82,6 +82,9 @@ export function drawWindowGlass(app, elapsed) {
         // Gavlene i andre etasje.
         { x: -3.9, y: 4.9, z: 0, width: 1.04, height: 0.84, rotation: 90 },
         { x:  3.9, y: 4.9, z: 0, width: 1.04, height: 0.84, rotation: 90 },
+
+        // Vindu i arken.
+        { x: 0, y: 5.25, z: 2.6, width: 0.84, height: 0.54, rotation: 0 },
     ];
 
     // Tegn de fjerneste vinduene først.

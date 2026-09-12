@@ -1,43 +1,44 @@
 'use strict';
 
 export function drawRoof(app, elapsed) {
-    const halfDepth = 3;
-    const roofRise = 2;
-    const overhang = 0.3;
+    const angle = Math.atan2(2, 3);
+    const angleDegrees = angle * 180 / Math.PI;
 
-    // Vinkelen beregnes fra takets stigning og halve husdybden.
-    const angleRadians = Math.atan2(roofRise, halfDepth);
-    const angleDegrees = angleRadians * 180 / Math.PI;
+    // Samme takutstikk som tidligere.
+    const roofLength = Math.sqrt(3 * 3 + 2 * 2) + 0.3;
+    const endZ = Math.cos(angle) * roofLength;
 
-    // Avstand fra mønet til veggen, langs takflaten.
-    const slopeLength = Math.sqrt(
-        halfDepth * halfDepth + roofRise * roofRise
-    );
+    // Tegner én rektangulær del av hovedtaket.
+    function drawRoofPart(x, width, startZ, stopZ, side) {
+        const centerZ = (startZ + stopZ) / 2;
 
-    // Forleng takflaten utenfor veggen.
-    const roofLength = slopeLength + overhang;
+        const modelMatrix = new Matrix4();
+        modelMatrix.translate(
+            x,
+            6.4 - centerZ * 2 / 3,
+            side * centerZ
+        );
 
-    // Midtpunktet til hver takflate.
-    const centerZ = Math.cos(angleRadians) * roofLength / 2;
-    const centerY = 6.4 - Math.sin(angleRadians) * roofLength / 2;
+        modelMatrix.rotate(side * angleDegrees, 1, 0, 0);
 
-    // Takflaten mot forsiden.
-    const frontRoofMatrix = new Matrix4();
-    frontRoofMatrix.translate(0, centerY, centerZ);
-    frontRoofMatrix.rotate(angleDegrees, 1, 0, 0);
-    frontRoofMatrix.scale(4.3, 0.1, roofLength / 2);
+        modelMatrix.scale(
+            width / 2,
+            0.1,
+            (stopZ - startZ) / (2 * Math.cos(angle))
+        );
 
-    app.roofCube.draw(
-        app.uniformShaderInfo, elapsed, frontRoofMatrix
-    );
+        app.roofCube.draw(
+            app.uniformShaderInfo, elapsed, modelMatrix
+        );
+    }
 
-    // Takflaten mot baksiden.
-    const backRoofMatrix = new Matrix4();
-    backRoofMatrix.translate(0, centerY, -centerZ);
-    backRoofMatrix.rotate(-angleDegrees, 1, 0, 0);
-    backRoofMatrix.scale(4.3, 0.1, roofLength / 2);
+    // Hele takflaten mot baksiden.
+    drawRoofPart(0, 8.6, 0, endZ, -1);
 
-    app.roofCube.draw(
-        app.uniformShaderInfo, elapsed, backRoofMatrix
-    );
+    // Forsiden, til venstre og høyre for arken.
+    drawRoofPart(-2.55, 3.5, 0, endZ, 1);
+    drawRoofPart(2.55, 3.5, 0, endZ, 1);
+
+    // Takstripen nedenfor arkens front.
+    drawRoofPart(0, 1.6, 2.6, endZ, 1);
 }
