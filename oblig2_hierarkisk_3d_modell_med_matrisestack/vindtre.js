@@ -1,7 +1,7 @@
-import {WebGLCanvas} from '../../../base/helpers/WebGLCanvas.js';
-import {WebGLShader} from '../../../base/helpers/WebGLShader.js';
-import {Camera} from "../../../base/helpers/Camera.js";
-import {Stack} from "../../../base/helpers/Stack.js";
+import {WebGLCanvas} from './helpers/WebGLCanvas.js';
+import {WebGLShader} from './helpers/WebGLShader.js';
+import {Camera} from "./helpers/Camera.js";
+import {Stack} from "./helpers/Stack.js";
 
 /**
  * Et WebGL-program som tegner et 2D-tre som svaier i vinden.
