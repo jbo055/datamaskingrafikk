@@ -1,4 +1,4 @@
-import {drawCube} from '../Tegnehjelp.js';
+import {drawKube} from '../Tegnehjelp.js';
 import {drawVinduer} from './Vinduer.js';
 
 // Faste deler, plassert i forhold til førerhuset.
@@ -64,13 +64,13 @@ export function drawForerhus(renderInfo, camera) {
         delMatrix.translate(...del.posisjon);
         delMatrix.scale(...del.skalering);
 
-        drawCube(
+        drawKube(
             renderInfo,
             delMatrix,
             camera,
             del.farge,
             del.brukTekstur ?? false,
-            renderInfo.cubeBuffer.texture,
+            renderInfo.kubeBuffer.texture,
             renderInfo.metalTexture
         );
     }

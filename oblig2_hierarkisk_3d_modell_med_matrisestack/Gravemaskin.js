@@ -14,7 +14,7 @@ export function drawGravemaskin(renderInfo, camera) {
     connectPositionAttribute(
         gl,
         renderInfo.baseShader,
-        renderInfo.cubeBuffer.position
+        renderInfo.kubeBuffer.position
     );
 
     // Hele gravemaskinens plassering i verden.

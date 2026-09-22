@@ -1,3 +1,5 @@
+import {samleGlass} from '../helpers/Glass.js';
+
 const vinduer = [
     {
         posisjon: [0, 0.95, -0.4],
@@ -29,10 +31,11 @@ export function drawVinduer(renderInfo, camera) {
         vinduMatrix.rotate(vindu.rotasjon, 0, 1, 0);
         vinduMatrix.scale(...vindu.skalering);
 
-        // Glasset tegnes i main.js etter de solide delene.
-        renderInfo.vinduer.push({
-            matrix: vinduMatrix,
-            farge: [0.5, 0.8, 0.95, 0.3]
-        });
+        // Glasset tegnes til slutt i bildet, etter de solide delene.
+        samleGlass(
+            renderInfo,
+            vinduMatrix,
+            [0.5, 0.8, 0.95, 0.3]
+        );
     }
 }

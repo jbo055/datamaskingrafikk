@@ -26,13 +26,13 @@ function connectColorUniform(gl, shader, colorRGBA) {
 /**
  * Tegner rektanglet med gitt transformasjon, kamera og farge.
  */
-export function drawCube(
+export function drawKube(
     renderInfo,
     modelMatrix,
     camera,
     colorRGBA,
     useTexture = false,
-    textureBuffer = renderInfo.cubeBuffer.texture,
+    textureBuffer = renderInfo.kubeBuffer.texture,
     texture = renderInfo.belteTexture
 ) {
     const gl = renderInfo.gl;
@@ -42,7 +42,7 @@ export function drawCube(
     connectPositionAttribute(
         gl,
         shader,
-        renderInfo.cubeBuffer.position
+        renderInfo.kubeBuffer.position
     );
 
     connectColorUniform(gl, shader, colorRGBA);
@@ -81,7 +81,7 @@ export function drawCube(
     gl.drawArrays(
         gl.TRIANGLES,
         0,
-        renderInfo.cubeBuffer.vertexCount
+        renderInfo.kubeBuffer.vertexCount
     );
 
     // De neste delene skal ikke automatisk arve teksturbruken.
@@ -89,27 +89,27 @@ export function drawCube(
     gl.disableVertexAttribArray(uvLocation);
 }
 
-export function drawPlane(renderInfo, modelMatrix, camera, colorRGBA) {
+export function drawFlate(renderInfo, modelMatrix, camera, colorRGBA) {
     const gl = renderInfo.gl;
     const shader = renderInfo.baseShader;
 
     connectPositionAttribute(
         gl,
         shader,
-        renderInfo.planeBuffer.position
+        renderInfo.flateBuffer.position
     );
 
     connectColorUniform(gl, shader, colorRGBA);
 
     connectMatrices(gl, shader, modelMatrix, camera);
 
-    gl.drawArrays(gl.TRIANGLES, 0, renderInfo.planeBuffer.vertexCount);
+    gl.drawArrays(gl.TRIANGLES, 0, renderInfo.flateBuffer.vertexCount);
 
     // Koble tilbake kubebufferet for delene som tegnes etterpå.
     connectPositionAttribute(
         gl,
         shader,
-        renderInfo.cubeBuffer.position
+        renderInfo.kubeBuffer.position
     );
 }
 
@@ -138,7 +138,7 @@ export function drawSylinder(renderInfo, modelMatrix, camera, colorRGBA) {
     connectPositionAttribute(
         gl,
         shader,
-        renderInfo.cubeBuffer.position
+        renderInfo.kubeBuffer.position
     );
 }
 
@@ -167,7 +167,7 @@ export function drawKjegle(renderInfo, modelMatrix, camera, colorRGBA) {
     connectPositionAttribute(
         gl,
         shader,
-        renderInfo.cubeBuffer.position
+        renderInfo.kubeBuffer.position
     );
 }
 

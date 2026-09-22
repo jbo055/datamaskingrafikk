@@ -1,4 +1,4 @@
-import {drawCube} from '../Tegnehjelp.js';
+import {drawKube} from '../Tegnehjelp.js';
 import {drawSkuff} from './Skuff.js';
 
 export function drawArm(renderInfo, camera) {
@@ -14,13 +14,13 @@ export function drawArm(renderInfo, camera) {
     bomTegneMatrix.translate(0, 2, 0);
     bomTegneMatrix.scale(0.3, 2, 0.4);
 
-    drawCube(
+    drawKube(
         renderInfo,
         bomTegneMatrix,
         camera,
         [1.0, 1.0, 1.0, 1.0],
         true,
-        renderInfo.cubeBuffer.texture,
+        renderInfo.kubeBuffer.texture,
         renderInfo.metalTexture
     );
 
@@ -36,13 +36,13 @@ export function drawArm(renderInfo, camera) {
     armTegneMatrix.translate(0, 1.5, 0);
     armTegneMatrix.scale(0.25, 1.5, 0.3);
 
-    drawCube(
+    drawKube(
         renderInfo,
         armTegneMatrix,
         camera,
         [1.0, 1.0, 1.0, 1.0],
         true,
-        renderInfo.cubeBuffer.texture,
+        renderInfo.kubeBuffer.texture,
         renderInfo.metalTexture
     );
 

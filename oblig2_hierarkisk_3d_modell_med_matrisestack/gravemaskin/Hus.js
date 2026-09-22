@@ -1,4 +1,4 @@
-import {drawCube} from '../Tegnehjelp.js';
+import {drawKube} from '../Tegnehjelp.js';
 import {drawArm} from './Arm.js';
 import {drawForerhus} from './Forerhus.js';
 
@@ -13,13 +13,13 @@ export function drawHus(renderInfo, camera) {
 	const husTegneMatrix = renderInfo.stack.peekMatrix();
 	husTegneMatrix.scale(2.2, 0.6, 1.3);
 
-	drawCube(
+	drawKube(
         renderInfo,
         husTegneMatrix,
         camera,
         [1.0, 1.0, 1.0, 1.0],
         true,
-        renderInfo.cubeBuffer.texture,
+        renderInfo.kubeBuffer.texture,
         renderInfo.metalTexture
     );
 
@@ -39,7 +39,7 @@ export function drawHus(renderInfo, camera) {
     stangMatrix.translate(0, 0.4, 0);
     stangMatrix.scale(0.08, 0.4, 0.08);
 
-    drawCube(
+    drawKube(
         renderInfo,
         stangMatrix,
         camera,
@@ -52,7 +52,7 @@ export function drawHus(renderInfo, camera) {
     radarHodeMatrix.rotate(renderInfo.animation.radarVinkel, 0, 1, 0);
     radarHodeMatrix.scale(0.7, 0.1, 0.15);
 
-    drawCube(
+    drawKube(
         renderInfo,
         radarHodeMatrix,
         camera,
